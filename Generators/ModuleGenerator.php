@@ -258,10 +258,6 @@ class ModuleGenerator extends Generator
 
         $this->generateFiles();
 
-        if (!$this->plain) {
-            $this->generateResources();
-        }
-
         $this->console->info("Module [{$name}] created successfully.");
     }
 
@@ -305,29 +301,6 @@ class ModuleGenerator extends Generator
 
             $this->console->info("Created : {$path}");
         }
-    }
-
-    /**
-     * Generate some resources.
-     */
-    public function generateResources()
-    {
-        $this->console->call('module:make-seed', [
-            'name' => $this->getName(),
-            'module' => $this->getName(),
-            '--master' => true,
-        ]);
-
-        $this->console->call('module:make-provider', [
-            'name' => $this->getName().'ServiceProvider',
-            'module' => $this->getName(),
-            '--master' => true,
-        ]);
-
-        $this->console->call('module:make-controller', [
-            'controller' => $this->getName().'Controller',
-            'module' => $this->getName(),
-        ]);
     }
 
     /**
