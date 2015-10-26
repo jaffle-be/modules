@@ -60,6 +60,15 @@ class ModuleGenerator extends Generator
      */
     protected $plain = false;
 
+    protected $replacements = [
+        'LOWER_NAME',
+        'STUDLY_NAME',
+        'VENDOR',
+        'AUTHOR_NAME',
+        'AUTHOR_EMAIL',
+        'MODULE_NAMESPACE'
+    ];
+
     /**
      * The constructor.
      *
@@ -324,7 +333,7 @@ class ModuleGenerator extends Generator
      */
     public function getReplacements()
     {
-        return $this->module->config('stubs.replacements');
+        return $this->replacements;
     }
 
     /**
@@ -336,19 +345,11 @@ class ModuleGenerator extends Generator
      */
     protected function getReplacement($stub)
     {
-        $replacements = $this->module->config('stubs.replacements');
-
-        $namespace = $this->module->config('namespace');
-
-        if (!isset($replacements[$stub])) {
-            return [];
-        }
-
-        $keys = $replacements[$stub];
+        $replacements = $this->replacements;
 
         $replaces = [];
 
-        foreach ($keys as $key) {
+        foreach ($replacements as $key) {
             if (method_exists($this, $method = 'get'.ucfirst(studly_case(strtolower($key))).'Replacement')) {
                 $replaces[$key] = call_user_func([$this, $method]);
             } else {
