@@ -291,7 +291,8 @@ class ModuleGenerator extends Generator
     public function generateFiles()
     {
         foreach ($this->getFiles() as $stub => $file) {
-            $path = $this->module->getModulePath($this->getName()).$file;
+
+            $path = $this->module->getModulePath($this->getName()). $this->getRealFilename($file);
 
             if (!$this->filesystem->isDirectory($dir = dirname($path))) {
                 $this->filesystem->makeDirectory($dir, 0775, true);
@@ -416,5 +417,14 @@ class ModuleGenerator extends Generator
     protected function getAuthorEmailReplacement()
     {
         return $this->module->config('composer.author.email');
+    }
+
+    protected function getRealFilename($file)
+    {
+        $file = str_replace('stub', $this->name, $file);
+
+        $file = str_replace('Stub', studly_case($this->name), $file);
+
+        return $file;
     }
 }
