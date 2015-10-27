@@ -23,33 +23,32 @@ return [
     */
 
     'stubs' => [
-        'enabled' => false,
-        'path' => base_path().'/vendor/pingpong/modules/src/Pingpong/Modules/Commands/stubs',
+        'enabled' => true,
+        'path' => base_path().'/vendor/pingpong/modules/Commands/stubs',
         'files' => [
-            'start' => 'start.php',
+            'start' => 'helpers.php',
             'routes' => 'Http/routes.php',
+            'breadcrumbs' => 'Http/breadcrumbs.php',
             'json' => 'module.json',
-            'views/index' => 'Resources/views/index.blade.php',
-            'views/master' => 'Resources/views/layouts/master.blade.php',
-            'scaffold/config' => 'Config/config.php',
+
+            'controllers/front' => 'Http/Controllers/StubController.php',
+            'controllers/admin' => 'Http/Controllers/Admin/StubController.php',
+
+            'provider' => 'Providers/StubServiceProvider.php',
+
+            'jobs/update' => 'Jobs/UpdateStub.php',
+
+            'views/admin/overview' => 'resources/views/admin/overview.blade.php',
+            'views/admin/detail' => 'resources/views/admin/detail.blade.php',
+            'scaffold/config' => 'config/config.php',
             'composer' => 'composer.json',
-        ],
-        'replacements' => [
-            'start' => ['LOWER_NAME'],
-            'routes' => ['LOWER_NAME', 'STUDLY_NAME', 'MODULE_NAMESPACE'],
-            'json' => ['LOWER_NAME', 'STUDLY_NAME', 'MODULE_NAMESPACE'],
-            'views/index' => ['LOWER_NAME'],
-            'views/master' => ['STUDLY_NAME'],
-            'scaffold/config' => ['STUDLY_NAME'],
-            'composer' => [
-                'LOWER_NAME',
-                'STUDLY_NAME',
-                'VENDOR',
-                'AUTHOR_NAME',
-                'AUTHOR_EMAIL',
-                'MODULE_NAMESPACE',
-            ],
-        ],
+            'js/admin/config' => 'resources/assets/js/admin/config.js',
+            'js/admin/models' => 'resources/assets/js/admin/models.js',
+            'js/admin/translations' => 'resources/assets/js/admin/translations.js',
+            'js/admin/controllers/overview' => 'resources/assets/js/admin/controllers/OverviewController.js',
+            'js/admin/controllers/detail' => 'resources/assets/js/admin/controllers/DetailController.js',
+            'js/admin/services/service' => 'resources/assets/js/admin/services/Service.js',
+        ]
     ],
     'paths' => [
         /*
@@ -94,20 +93,28 @@ return [
         */
 
         'generator' => [
-            'assets' => 'Assets',
-            'config' => 'Config',
+            'config' => 'config',
+            'migration' => 'database/migrations',
+            'seeder' => 'database/seeders',
+            'images' => 'database/images',
+            'en' => 'resources/lang/en',
+            'nl' => 'resources/lang/nl',
+            'de' => 'resources/lang/de',
+            'fr' => 'resources/lang/fr',
+            'views' => 'resources/views',
+            'jscontrollers' => 'resources/assets/js/admin/controllers',
+            'jsdirectives' => 'resources/assets/js/admin/directives/',
+            'jsservices' => 'resources/assets/js/admin/services/',
+            'test' => 'tests',
             'command' => 'Console',
-            'migration' => 'Database/Migrations',
+            'jobs' => 'Jobs',
+            'presenter' => 'Presenter',
             'model' => 'Entities',
             'repository' => 'Repositories',
-            'seeder' => 'Database/Seeders',
             'controller' => 'Http/Controllers',
             'filter' => 'Http/Middleware',
             'request' => 'Http/Requests',
             'provider' => 'Providers',
-            'lang' => 'Resources/lang',
-            'views' => 'Resources/views',
-            'test' => 'Tests',
         ],
     ],
     /*
