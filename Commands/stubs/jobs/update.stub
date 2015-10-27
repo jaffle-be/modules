@@ -1,0 +1,32 @@
+<?php namespace $MODULE_NAMESPACE$\$STUDLY_NAME$\Jobs;
+
+use Modules\$STUDLY_CASE$\$STUDLY_CASE$;
+use App\Jobs\Job;
+use Illuminate\Contracts\Bus\SelfHandling;
+
+class Update$STUDLY_CASE$ extends Job implements SelfHandling{
+
+    /**
+     * @var $STUDLY_CASE$
+     */
+    protected $$LOWER_CASE$;
+
+    /**
+     * @var array
+     */
+    protected $input;
+
+    public function __construct($STUDLY_CASE$ $$LOWER_CASE$, array $input)
+    {
+        $this->$LOWER_CASE$ = $$LOWER_CASE$;
+        $this->input = $input;
+    }
+
+    public function handle()
+    {
+        $this->$LOWER_CASE$->fill($this->input);
+
+        return $this->$LOWER_CASE$->save() ? $this->$LOWER_CASE$ : false;
+    }
+
+}

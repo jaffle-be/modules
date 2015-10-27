@@ -1,0 +1,104 @@
+angular.module('$LOWER_NAME$')
+    .controller('$STUDLY_NAME$Controller', function ($STUDLY_NAME$, $STUDLY_NAME$Service, $state, $scope, $sce) {
+
+        $scope.renderHtml = function(html_code)
+        {
+            return $sce.trustAsHtml(html_code);
+        };
+
+        //start with true so we don't see the layout flash
+        this.loading = true;
+        this.rpp = 15;
+        this.total = 0;
+        this.$LOWER_NAME$s = [];
+
+        var me = this;
+
+        this.getPage = function(start)
+        {
+            return page = Math.ceil(start / this.rpp) + 1;
+        };
+
+        this.list = function(table) {
+
+            me.table = table;
+            me.loading = true;
+            //cannot use this here
+            var page = me.getPage(table.pagination.start);
+
+            me.load$STUDLY_NAME$s(page);
+        };
+
+        this.load$STUDLY_NAME$s = function(page)
+        {
+            var me = this;
+
+            $STUDLY_NAME$.query({
+                page: page,
+                query: me.table.search.predicateObject ? me.table.search.predicateObject.query : '',
+                locale: me.options.locale,
+            }, function (response) {
+
+                me.total = response.total;
+                me.$LOWER_NAME$s = response.data;
+                me.table.pagination.numberOfPages = response.last_page;
+                me.loading = false;
+            });
+        };
+
+        this.new$STUDLY_NAME$ = function()
+        {
+            var $LOWER_NAME$ = new $STUDLY_NAME$();
+            $STUDLY_NAME$Service.save($LOWER_NAME$, function(new$STUDLY_NAME$)
+            {
+                $state.go('admin.$LOWER_NAME$.detail', {id: new$STUDLY_NAME$.id});
+            });
+        };
+
+        this.delete = function()
+        {
+            var $LOWER_NAME$s = this.selected$STUDLY_NAME$s();
+
+            $STUDLY_NAME$Service.batchDelete($LOWER_NAME$s, function()
+            {
+                me.load$STUDLY_NAME$s();
+            });
+
+        };
+
+        this.batchPublish = function()
+        {
+            var $LOWER_NAME$s = this.selected$STUDLY_NAME$s();
+
+            $STUDLY_NAME$Service.batchPublish($LOWER_NAME$s, me.options.locale, function()
+            {
+
+            });
+        };
+
+        this.batchUnpublish = function()
+        {
+            var $LOWER_NAME$s = this.selected$STUDLY_NAME$s();
+
+            $STUDLY_NAME$Service.batchUnpublish($LOWER_NAME$s, me.options.locale, function()
+            {
+
+            });
+        };
+
+        this.selected$STUDLY_NAME$s = function()
+        {
+            var $LOWER_NAME$s = [],
+                me = this;
+
+            _.each(this.$LOWER_NAME$s, function($LOWER_NAME$)
+            {
+                if($LOWER_NAME$.isSelected)
+                {
+                    $LOWER_NAME$s.push($LOWER_NAME$.id);
+                }
+            });
+
+            return $LOWER_NAME$s;
+        }
+    });

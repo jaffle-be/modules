@@ -1,0 +1,37 @@
+angular.module('$LOWER_NAME$')
+    .controller('$STUDLY_NAME$DetailController', function ($scope, $STUDLY_NAME$, $STUDLY_NAME$Service, $state) {
+
+        this.$LOWER_NAME$s = $STUDLY_NAME$Service;
+
+        var me = this,
+            id = $state.params.id;
+
+
+        this.load = function(id){
+
+            if(id)
+            {
+                this.$LOWER_NAME$s.find(id, function($LOWER_NAME$){
+                });
+            }
+            else{
+                me.$LOWER_NAME$ = new $STUDLY_NAME$();
+            }
+        };
+
+        this.save = function()
+        {
+            $STUDLY_NAME$Service.save(me.$LOWER_NAME$);
+        };
+
+        this.delete = function()
+        {
+            $STUDLY_NAME$Service.delete(me.$LOWER_NAME$, function()
+            {
+                $state.go('admin.$LOWER_NAME$.overview');
+            });
+        };
+
+        this.load(id);
+
+    });

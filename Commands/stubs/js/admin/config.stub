@@ -1,0 +1,18 @@
+angular.module('$LOWER_NAME$', [])
+    .config(function ($stateProvider) {
+
+        $stateProvider
+            .state('admin.$LOWER_NAME$', {
+                abstract: true,
+                url: "/$LOWER_NAME$",
+                template: '<ui-view/>'
+            })
+            .state('admin.$LOWER_NAME$.overview', {
+                url: "/posts",
+                templateUrl: "templates/admin/$LOWER_NAME$/overview"
+            })
+            .state('admin.$LOWER_NAME$.detail', {
+                url: '/post/:id',
+                templateUrl: "templates/admin/$LOWER_NAME$/detail"
+            });
+    });

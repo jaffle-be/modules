@@ -1,0 +1,185 @@
+<?php namespace $MODULE_NAMESPACE$\$STUDLY_NAME$\Http\Controllers\Admin;
+
+use Modules\Account\AccountManager;
+use Modules\$STUDLY_NAME$\Jobs\Update$STUDLY_NAME$;
+use Modules\$STUDLY_NAME$\$STUDLY_NAME$;
+use Modules\$STUDLY_NAME$\$STUDLY_NAME$RepositoryInterface;
+use Modules\System\Http\AdminController;
+use Exception;
+use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+
+class $STUDLY_NAME$Controller extends AdminController
+{
+
+    public function overview()
+    {
+        return view('$LOWER_NAME$s::admin.overview');
+    }
+
+    public function detail()
+    {
+        return view('$LOWER_NAME$s::admin.detail');
+    }
+
+    public function index(Request $request)
+    {
+        $query = $STUDLY_NAME$::with(['translations', 'images', 'images.sizes' => function ($query) {
+            $query->dimension(150);
+        }, 'images.translations']);
+
+        $value = $request->get('query');
+        $locale = $request->get('locale');
+
+        if (!empty($value)) {
+            $query->whereHas('translations', function ($q) use ($value, $locale) {
+                $q->where('locale', $locale);
+                $q->where(function ($q) use ($value) {
+                    $q->where('title', 'like', '%' . $value . '%')
+                        ->orWhere('content', 'like', '%' . $value . '%');
+                });
+            });
+        }
+
+        return $query->paginate();
+    }
+
+    public function store(Request $request, $STUDLY_NAME$ $$LOWER_NAME$, Guard $guard, AccountManager $accounts)
+    {
+        $input = translation_input($request);
+
+        $$LOWER_NAME$ = $$LOWER_NAME$->newInstance($input);
+
+        $$LOWER_NAME$->account_id = $accounts->account()->id;
+
+        $$LOWER_NAME$->user()->associate($guard->user());
+
+        if ($$LOWER_NAME$->save()) {
+            return $$LOWER_NAME$;
+        }
+
+        return json_encode(array(
+            'status' => 'noke'
+        ));
+    }
+
+    public function show($STUDLY_NAME$ $$LOWER_NAME$, $STUDLY_NAME$RepositoryInterface $$LOWER_NAME$s)
+    {
+        $$LOWER_NAME$->load($this->relations());
+
+        //make sure one cannot select itself as a sub$LOWER_NAME$
+        $but = new Collection([$$LOWER_NAME$]);
+
+        if($$LOWER_NAME$->parent)
+        {
+            $but->push($$LOWER_NAME$->parent);
+        }
+
+        //make sure one cannot select a $LOWER_NAME$ B to add as a sub$LOWER_NAME$ to $LOWER_NAME$ A when $LOWER_NAME$ A is already a child of $LOWER_NAME$ B
+        $available$STUDLY_NAME$ = $$LOWER_NAME$s->with(['translations'])->orphans()->but($but)->get();
+
+        $$LOWER_NAME$->available$STUDLY_NAME$ = $available$STUDLY_NAME$;
+
+        return $$LOWER_NAME$;
+    }
+
+    public function update($STUDLY_NAME$ $$LOWER_NAME$, Request $request)
+    {
+        $$LOWER_NAME$->load($this->relations());
+
+        $payload = [
+            '$LOWER_NAME$'  => $$LOWER_NAME$,
+            'input' => translation_input($request, ['title', 'content', 'publish_at'])
+        ];
+
+        if (!$this->dispatchFromArray(Update$STUDLY_NAME$::class, $payload)) {
+            return response('500', 'something bad happened');
+        }
+
+        $$LOWER_NAME$->load($this->relations());
+
+        return $$LOWER_NAME$;
+    }
+
+    public function batchDestroy(Request $request, $STUDLY_NAME$ $$LOWER_NAME$)
+    {
+        $ids = $request->get('$LOWER_NAME$s', []);
+
+        if(is_array($ids) && count($ids))
+        {
+            $$LOWER_NAME$s = $$LOWER_NAME$->whereIn('$LOWER_NAME$s.id', $ids)
+                ->get();
+
+            foreach($$LOWER_NAME$s as $$LOWER_NAME$)
+            {
+                $$LOWER_NAME$->delete();
+            }
+        }
+    }
+
+    public function destroy($STUDLY_NAME$ $$LOWER_NAME$)
+    {
+        //make sure to load the relations, in order to delete morphing relations.
+        if($$LOWER_NAME$->delete())
+        {
+            $$LOWER_NAME$->id = false;
+        }
+
+        return $$LOWER_NAME$;
+    }
+
+    public function batchPublish(Request $request, $STUDLY_NAME$ $$LOWER_NAME$)
+    {
+        $ids = $request->get('$LOWER_NAME$s', []);
+
+        if(is_array($ids) && count($ids))
+        {
+            $$LOWER_NAME$s = $$LOWER_NAME$->whereIn('$LOWER_NAME$s.id', $ids)
+                ->get();
+
+            foreach($$LOWER_NAME$s as $$LOWER_NAME$)
+            {
+                $translation = $$LOWER_NAME$->translate($request->get('locale'));
+
+                if($translation)
+                {
+                    $translation->published = true;
+                }
+
+                $translation->save();
+            }
+        }
+    }
+
+    public function batchUnpublish(Request $request, $STUDLY_NAME$ $$LOWER_NAME$)
+    {
+        $ids = $request->get('$LOWER_NAME$s', []);
+
+        if(is_array($ids) && count($ids))
+        {
+            $$LOWER_NAME$s = $$LOWER_NAME$->whereIn('$LOWER_NAME$s.id', $ids)
+                ->get();
+
+            foreach($$LOWER_NAME$s as $$LOWER_NAME$)
+            {
+                $translation = $$LOWER_NAME$->translate($request->get('locale'));
+
+                if($translation)
+                {
+                    $translation->published = false;
+                }
+
+                $translation->save();
+            }
+        }
+    }
+
+    protected function relations()
+    {
+        return ['translations', 'translations.slug', 'children', 'children.translations'];
+    }
+
+
+
+}

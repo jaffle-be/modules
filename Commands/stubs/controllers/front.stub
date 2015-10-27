@@ -1,0 +1,39 @@
+<?php namespace $MODULE_NAMESPACE$\$STUDLY_NAME$\Http\Controllers;
+
+use Modules\$STUDLY_NAME$\$STUDLY_NAME$;
+use Modules\$STUDLY_NAME$\$STUDLY_NAME$Translation;
+use Modules\System\Http\FrontController;
+use Modules\Tags\Tag;
+
+class $CLASS$ extends FrontController
+{
+
+    public function index($STUDLY_NAME$ $$LOWER_NAME$)
+    {
+        $$LOWER_NAME$s = $$LOWER_NAME$->with($this->relations())->get();
+
+        return $this->theme->render('$LOWER_NAME$.index', ['$LOWER_NAME$s' => $$LOWER_NAME$s]);
+    }
+
+    public function show($STUDLY_NAME$Translation $$LOWER_NAME$)
+    {
+        $relations = $this->relations();
+
+        $$LOWER_NAME$ = $$LOWER_NAME$->parent;
+
+        $$LOWER_NAME$->load($relations);
+
+        $this->seo->setEntity($$LOWER_NAME$);
+
+        return $this->theme->render('$LOWER_NAME$.show', ['$LOWER_NAME$' => $$LOWER_NAME$]);
+    }
+
+    /**
+     * @return array
+     */
+    protected function relations()
+    {
+        return ['translations', 'images', 'images.translations'];
+    }
+
+}

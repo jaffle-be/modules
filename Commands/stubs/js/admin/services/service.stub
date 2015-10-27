@@ -1,0 +1,54 @@
+angular.module('$LOWER_NAME$')
+    .factory('$STUDLY_NAME$Service', function ($STUDLY_NAME$, $timeout, $http) {
+
+        return Service = {
+            find: function (id, success) {
+                $STUDLY_NAME$.get({id: id}, success);
+            },
+            query: function (params, success) {
+                $STUDLY_NAME$.query(params, success);
+            },
+            save: function ($LOWER_NAME$, success) {
+                if ($LOWER_NAME$.id)
+                {
+                    //use a copy, so the response will not reset the form to the last saved instance while typing.
+                    var destination = angular.copy($LOWER_NAME$);
+
+                    if (this.timeout)
+                    {
+                        $timeout.cancel(this.timeout);
+                    }
+
+                    this.timeout = $timeout(function () {
+                        return destination.$update(success);
+                    }, 400);
+                }
+                else
+                {
+                    $LOWER_NAME$.$save({}, success);
+                }
+            },
+            delete: function ($LOWER_NAME$, success) {
+                $LOWER_NAME$.$delete().then(success);
+            },
+            batchDelete: function ($LOWER_NAME$s, success) {
+                $http.post('/api/admin/$LOWER_NAME$/batch-delete', {
+                    $LOWER_NAME$s: $LOWER_NAME$s
+                }).then(success);
+            },
+            batchPublish: function ($LOWER_NAME$s, locale, success) {
+                $http.post('/api/admin/$LOWER_NAME$/batch-publish', {
+                    $LOWER_NAME$s: $LOWER_NAME$s,
+                    locale: locale
+                }).then(success);
+            },
+            batchUnpublish: function ($LOWER_NAME$s, locale, success) {
+                $http.post('/api/admin/$LOWER_NAME$/batch-unpublish', {
+                    $LOWER_NAME$s: $LOWER_NAME$s,
+                    locale: locale
+                }).then(success);
+            },
+
+        };
+
+    });

@@ -1,8 +1,8 @@
-<?php namespace $NAMESPACE$;
+<?php namespace $MODULE_NAMESPACE$\$STUDLY_NAME$\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use Pingpong\Modules\ServiceProvider;
 
-class $CLASS$ extends ServiceProvider {
+class $STUDLY_NAME$ServiceProvider extends ServiceProvider {
 
 	/**
 	 * Indicates if loading of the provider is deferred.
@@ -11,14 +11,26 @@ class $CLASS$ extends ServiceProvider {
 	 */
 	protected $defer = false;
 
+	protected $namespace = '$LOWER_NAME$';
+
 	/**
 	 * Register the service provider.
 	 *
 	 * @return void
 	 */
 	public function register()
-	{
+	{		
 		//
+	}
+
+	protected function listeners()
+	{
+
+	}
+
+	protected function observers()
+	{
+
 	}
 
 	/**

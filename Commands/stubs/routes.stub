@@ -1,6 +1,42 @@
 <?php
 
-Route::group(['prefix' => '$LOWER_NAME$', 'namespace' => '$MODULE_NAMESPACE$\$STUDLY_NAME$\Http\Controllers'], function()
-{
-	Route::get('/', '$STUDLY_NAME$Controller@index');
+/**
+ * store controllers
+ */
+Route::group([
+    'namespace' => 'Modules\$STUDLY_NAME$\Http',
+    'as' => 'store.'
+], function () {
+
+    Route::group([
+        'namespace' => 'Admin',
+    ], function()
+    {
+        Route::group(['prefix' => 'templates/admin'], function () {
+            //template files, load at top so we do not end up in the show method
+            Route::get('$LOWER_NAME$/overview', '$STUDLY_NAME$Controller@overview');
+            Route::get('$LOWER_NAME$/detail', '$STUDLY_NAME$Controller@detail');
+        });
+
+        //actual resource
+        Route::group(['prefix' => 'api/admin'], function () {
+            Route::resource('$LOWER_NAME$', '$STUDLY_NAME$Controller');
+            Route::post('$LOWER_NAME$/batch-delete', '$STUDLY_NAME$Controller@batchDestroy');
+            Route::post('$LOWER_NAME$/batch-publish', '$STUDLY_NAME$Controller@batchPublish');
+            Route::post('$LOWER_NAME$/batch-unpublish', '$STUDLY_NAME$Controller@batchUnpublish');
+        });
+    });
+
+    //FRONT ROUTES
+    if(env('APP_MULTIPLE_LOCALES'))
+    {
+        foreach(config('system.locales') as $locale)
+        {
+            Route::get("$locale/$LOWER_NAME$", ['uses' => '$STUDLY_NAME$Controller@index', 'as' => "$locale.$LOWER_NAME$.index"]);
+        }
+    }
+    else{
+        Route::get('$LOWER_NAME$', ['uses' => '$STUDLY_NAME$Controller@index', 'as' => '$LOWER_NAME$.index']);
+    }
+
 });
