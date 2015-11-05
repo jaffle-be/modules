@@ -14,9 +14,10 @@ abstract class ServiceProvider extends Provider
 
     protected $publishing = [
         '/config',
-        '/Database/Migrations',
-        '/Database/Seeds',
-        '/Database/Images',
+        '/database/migrations',
+        '/database/seeds',
+        '/database/images',
+        '/database/factories',
     ];
 
     public function boot()
