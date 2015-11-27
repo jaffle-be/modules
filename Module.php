@@ -29,6 +29,11 @@ class Module extends ServiceProvider
      * @var string
      */
     protected $path;
+    
+    /**
+     * Cached json
+     */
+    protected $_json;
 
     /**
      * The constructor.
@@ -171,7 +176,12 @@ class Module extends ServiceProvider
      */
     public function json()
     {
-        return new Json($this->getPath().'/module.json', $this->app['files']);
+        if(!isset($this->_json))
+        {
+            $this->_json = new Json($this->getPath().'/module.json', $this->app['files']);
+        }
+
+        return $this->_json;
     }
 
     /**
