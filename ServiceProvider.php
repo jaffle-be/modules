@@ -45,10 +45,14 @@ abstract class ServiceProvider extends Provider
      */
     protected function routes($dir)
     {
-        $routes = $dir . '/Http/routes.php';
-        if (file_exists($routes)) {
-            include $routes;
+        if(!$this->app->routesAreCached())
+        {
+            $routes = $dir . '/Http/routes.php';
+            if (file_exists($routes)) {
+                include $routes;
+            }
         }
+
 
         /**
          * we bind the loading of the breadcrumbs to the bootstrapped event, just after all providers have been booted.
