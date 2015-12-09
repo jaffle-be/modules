@@ -32,11 +32,8 @@ abstract class ServiceProvider extends Provider
             $this->$setup($dir);
         }
 
-        $this->observers();
         $this->listeners();
     }
-
-    protected abstract function observers();
 
     protected abstract function listeners();
 
